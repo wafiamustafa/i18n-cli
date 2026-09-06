@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to i18n-ai-cli! We welcome contributions from the community and are excited to see what you'll build.
 
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![License: Custom](https://img.shields.io/badge/License-Custom-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 
 ## Table of Contents
@@ -87,14 +87,16 @@ npm unlink -g i18n-ai-cli
 
 ### Environment Setup (Optional)
 
-For testing OpenAI integration:
+For testing OpenAI or Google Cloud integration:
 
 ```bash
-# Create a .env file in the project root
-echo "OPENAI_API_KEY=sk-your-test-key-here" > .env
+# Create a .env file in the project root, then uncomment and fill in your keys
+cp .env.example .env
 
 # The .env file is gitignored, so it won't be committed
 ```
+
+Both providers read these keys automatically. See the [environment lookup rules](README.md#persistent-api-keys-all-frameworks) for `.env.local`, environment-specific files, and CI overrides. Automated tests use mocks and do not require real keys.
 
 ## Making Changes
 

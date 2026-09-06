@@ -1,0 +1,39 @@
+i18n-ai-cli License
+
+Copyright (c) 2026 Wafia Mustafa R.
+
+Permission is granted, without a license fee, to use, copy, modify, and
+redistribute this software in source or binary form, including for commercial
+purposes, provided that all of the following conditions are met:
+
+1. Copies and redistributions must retain this copyright notice and license.
+
+2. The unofficial Google Translate integration provided through
+   @vitalets/google-translate-api may be used with this software only for
+   personal, non-commercial purposes. Personal use means an individual's
+   private learning, experimentation, or hobby projects that do not support
+   a business, paid client work, or a commercial product or service.
+
+3. When using this software's Google translation functionality for commercial
+   purposes, you must supply a valid Google Cloud API key and use the official
+   Google Cloud Translation API. Commercial purposes include business use,
+   internal business tools, paid client work, and products or services intended
+   to generate revenue. You must comply with Google's applicable terms,
+   authentication requirements, billing obligations, and quotas. You may not
+   use or fall back to the unofficial integration for these purposes.
+
+4. Other translation providers may be used for personal or commercial purposes
+   subject to their own terms. A Google API key is required only when using
+   Google translation functionality for commercial purposes.
+
+These conditions govern this software, including modified versions. They do
+not change the licenses of third-party dependencies, including the MIT license
+of @vitalets/google-translate-api. Permission under this license does not grant
+permission from Google to access its services or override its terms, even for
+personal use. Earlier releases distributed under ISC remain governed by their
+original license.
+
+The software is supplied as available, without warranties of any kind. To the
+extent permitted by applicable law, the copyright holders and contributors
+accept no liability for claims, losses, or damages arising from its use,
+modification, or distribution.

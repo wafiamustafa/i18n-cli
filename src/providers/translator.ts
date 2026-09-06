@@ -19,11 +19,16 @@ export interface Translator {
 export interface GoogleTranslatorOptions {
   from?: string;
   to?: string;
+  /** Unofficial personal-use backend only. */
   host?: string;
+  /** Unofficial personal-use backend only. */
   fetchOptions?: Record<string, unknown>;
+  /** Selects Google Cloud Translation Basic (v2); falls back to GOOGLE_API_KEY in the environment or project .env files. */
+  apiKey?: string;
 }
 
 export interface OpenAITranslatorOptions {
+  /** Falls back to OPENAI_API_KEY in the environment or project .env files. */
   apiKey?: string;
   model?: string;
   baseUrl?: string;

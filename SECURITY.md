@@ -50,9 +50,9 @@ When using i18n-ai-cli, please follow these security best practices:
 
 ### API Key Management
 
-**OpenAI API Keys:**
+**OpenAI and Google Cloud API Keys:**
 - ✅ **DO**: Store API keys in environment variables or `.env` files
-- ✅ **DO**: Add `.env` to your `.gitignore` file
+- ✅ **DO**: Add `.env`, `.env.*`, and any custom secret file to your `.gitignore` file
 - ✅ **DO**: Rotate API keys periodically
 - ❌ **DON'T**: Commit API keys to version control
 - ❌ **DON'T**: Hardcode API keys in source code
@@ -62,10 +62,14 @@ When using i18n-ai-cli, please follow these security best practices:
 ```bash
 # Recommended
 export OPENAI_API_KEY=sk-your-api-key-here
+export GOOGLE_API_KEY=your-google-cloud-api-key
 
 # Or use a .env file (add to .gitignore)
 OPENAI_API_KEY=sk-your-api-key-here
+GOOGLE_API_KEY=your-google-cloud-api-key
 ```
+
+Both providers automatically read project `.env` files using the same [lookup rules](README.md#persistent-api-keys-all-frameworks). Shell and CI variables take precedence. Keep keys unprefixed and outside Angular `environment.ts` and browser-public `VITE_`, `REACT_APP_`, or `NEXT_PUBLIC_` variables.
 
 ### File Permissions
 
@@ -90,7 +94,8 @@ OPENAI_API_KEY=sk-your-api-key-here
 - No intermediate servers or proxies are used
 - API endpoints:
   - OpenAI: `https://api.openai.com/v1`
-  - Google Translate: Public Google Translate API
+  - Google Cloud Translation (with `GOOGLE_API_KEY`): `https://translation.googleapis.com/language/translate/v2`
+  - Unofficial Google Translate (personal, non-commercial use only, without a key): `https://translate.google.com`
 
 ### Dependency Security
 
@@ -116,9 +121,10 @@ npm audit fix
 - Review OpenAI's [security documentation](https://platform.openai.com/docs/security)
 
 **Google Translate Integration:**
-- Uses free `@vitalets/google-translate-api` package
-- Subject to Google's rate limits
-- Not recommended for high-volume production use
+- With `GOOGLE_API_KEY` (or the provider's `apiKey` option), uses the official Google Cloud Translation API and sends the key in an authentication header.
+- Commercial Google translation must use the official API with a valid key, enabled billing, and compliance with Google's terms and quotas.
+- Without a key, uses `@vitalets/google-translate-api` for personal, non-commercial use only, subject to Google's terms and rate limits.
+- Failed official API requests never fall back to the unofficial integration.
 
 ### File System Access
 
@@ -183,7 +189,7 @@ Security updates are released as patch versions (e.g., `1.0.8` → `1.0.9`).
 
 ## Legal Notice
 
-This security policy is part of our commitment to maintaining a secure open-source project. By reporting or using i18n-ai-cli, you agree to:
+This security policy is part of our commitment to maintaining a secure project. By reporting or using i18n-ai-cli, you agree to:
 
 - Act in good faith when reporting vulnerabilities
 - Not exploit discovered vulnerabilities maliciously

@@ -2,6 +2,7 @@
 
 import { Command } from "commander";
 import chalk from "chalk";
+import { resolveApiKey } from "../config/environment.js";
 import { buildContext } from "../context/build-context.js";
 import { initCommand } from "../commands/init.js";
 import { addLang } from "../commands/add-lang.js";
@@ -91,7 +92,7 @@ withGlobalOptions(
               `Unknown translation provider "${provider}". Use "google" or "openai".`
             );
           }
-        } else if (process.env.OPENAI_API_KEY) {
+        } else if (resolveApiKey("OPENAI_API_KEY") !== undefined) {
           translator = new OpenAITranslator();
         } else {
           translator = new GoogleTranslator();
@@ -128,7 +129,7 @@ withGlobalOptions(
                 `Unknown translation provider "${provider}". Use "google" or "openai".`
               );
             }
-          } else if (process.env.OPENAI_API_KEY) {
+          } else if (resolveApiKey("OPENAI_API_KEY") !== undefined) {
             translator = new OpenAITranslator();
           } else {
             translator = new GoogleTranslator();
@@ -187,7 +188,7 @@ withGlobalOptions(
               `Unknown translation provider "${provider}". Use "google" or "openai".`
             );
           }
-        } else if (process.env.OPENAI_API_KEY) {
+        } else if (resolveApiKey("OPENAI_API_KEY") !== undefined) {
           translator = new OpenAITranslator();
         } else {
           translator = new GoogleTranslator();

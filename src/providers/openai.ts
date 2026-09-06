@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { resolveApiKey } from "../config/environment.js";
 import type {
   Translator,
   TranslationRequest,
@@ -12,11 +13,11 @@ export class OpenAITranslator implements Translator {
   private model: string;
 
   constructor(options: OpenAITranslatorOptions = {}) {
-    const apiKey = options.apiKey ?? process.env.OPENAI_API_KEY;
+    const apiKey = (options.apiKey ?? resolveApiKey("OPENAI_API_KEY"))?.trim();
 
     if (!apiKey) {
       throw new Error(
-        "OpenAI API key is required. Provide it via the 'apiKey' constructor option or set the OPENAI_API_KEY environment variable."
+        "OpenAI API key is required. Provide it via the 'apiKey' constructor option, set OPENAI_API_KEY in your environment, or add it to a project .env file."
       );
     }
 

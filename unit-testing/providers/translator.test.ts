@@ -4,6 +4,11 @@ import { DeeplTranslator } from '../../src/providers/deepl.js';
 import { OpenAITranslator } from '../../src/providers/openai.js';
 import type { TranslationRequest } from '../../src/providers/translator.js';
 
+// File resolution has separate integration tests; ignore developers' real .env files here.
+vi.mock('../../src/config/environment.js', () => ({
+  resolveApiKey: (name: string) => process.env[name]
+}));
+
 // Mock the google translate API
 vi.mock('@vitalets/google-translate-api', () => ({
   translate: vi.fn()
@@ -29,6 +34,11 @@ describe('Translator Providers', () => {
   describe('GoogleTranslator', () => {
     beforeEach(() => {
       vi.resetAllMocks();
+      vi.stubEnv('GOOGLE_API_KEY', undefined);
+    });
+
+    afterEach(() => {
+      vi.unstubAllEnvs();
     });
 
     it('should have correct name', () => {
