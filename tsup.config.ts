@@ -15,10 +15,13 @@ export default defineConfig({
   external: [
     // All production dependencies
     "@vitalets/google-translate-api",
+    "@babel/parser",
+    "@babel/types",
     "chalk",
     "commander",
     "fs-extra",
     "glob",
+    "htmlparser2",
     "inquirer",
     "iso-639-1",
     "leven",

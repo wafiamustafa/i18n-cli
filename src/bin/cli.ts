@@ -4,6 +4,7 @@ import { Command } from "commander";
 import chalk from "chalk";
 import { resolveApiKey } from "../config/environment.js";
 import { buildContext } from "../context/build-context.js";
+import { buildCheckContext } from "../context/build-check-context.js";
 import { initCommand } from "../commands/init.js";
 import { addLang } from "../commands/add-lang.js";
 import { removeLangCommand } from "../commands/remove-lang.js";
@@ -12,6 +13,8 @@ import { updateKeyCommand } from "../commands/update-key.js";
 import { removeKeyCommand } from "../commands/remove-key.js";
 import { cleanUnusedCommand } from "../commands/clean-unused.js";
 import { validateCommand } from "../commands/validate.js";
+import { checkTranslationsCommand } from "../commands/check-translations.js";
+import { DEFAULT_TRANSLATION_FILES } from "../core/translation-checker.js";
 import { GoogleTranslator } from "../providers/google.js";
 import { OpenAITranslator } from "../providers/openai.js";
 import type { Translator } from "../providers/translator.js";
@@ -159,6 +162,18 @@ withGlobalOptions(
     .action(async (options) => {
         const context = await buildContext(options);
         await cleanUnusedCommand(context);
+    })
+);
+
+// Source Translation Check
+withGlobalOptions(
+  program
+    .command("check:translations")
+    .description("List HTML, Vue, and JSX/TSX files containing text that needs translation")
+    .option("--files <glob>", "Source files to scan", DEFAULT_TRANSLATION_FILES)
+    .action(async (options) => {
+      const context = await buildCheckContext(options);
+      await checkTranslationsCommand(context, options);
     })
 );
 
