@@ -12,6 +12,7 @@ AI-powered CLI tool for managing translation files in internationalized applicat
 - **🌍 Language Management**: Add/remove locales with ISO 639-1 validation
 - **🔑 Key Management**: Add, update, remove keys with auto-translation
 - **🧹 Maintenance**: Unused key detection, structural validation, auto-correction
+- **🔎 Translation Checks**: List HTML, Vue, and React files containing text that still needs translation
 - **⚡ Developer Experience**: Dry run mode, CI/CD ready, TypeScript support
 
 ## 📦 Installation
@@ -49,6 +50,9 @@ i18n-ai-cli clean:unused
 
 # Validate files
 i18n-ai-cli validate
+
+# Find files with untranslated text
+i18n-ai-cli check:translations
 ```
 
 ## ⚙️ Configuration
@@ -186,6 +190,70 @@ i18n-ai-cli remove:key auth.legacy.title
 **Options:** `-y, --yes`, `--dry-run`
 
 ### Validation & Maintenance Commands
+
+#### Check Source Translation Usage
+
+```bash
+i18n-ai-cli check:translations
+i18n-ai-cli check:translations --files "src/**/*.{html,vue,jsx,tsx}"
+i18n-ai-cli check:translations --files "pages/**/*.html" --ci
+```
+
+Lists each file containing literal UI text that needs translation, including files
+that already translate some of their content. Supports plain HTML, Angular HTML
+and inline templates, Vue templates, and React JSX/TSX (including JSX in `.js`).
+This command only reads source files and does not call translation providers.
+It works without configuration; if `i18n-cli.config.json` exists in the current
+directory, its `usagePatterns` are used for custom translation expressions.
+
+**Options:**
+
+- `--files <glob>`: Files to scan (default: `**/*.{html,htm,vue,jsx,tsx,js,ts}`). Quote the glob so your shell does not expand it. Dependencies and generated files in `node_modules`, `dist`, `build`, and `coverage` are excluded.
+- `--ci`: Exit with an error after listing affected files. A clean scan exits successfully.
+
+Checks rendered text, literal expressions, `title`, `alt`, `placeholder`, `label`,
+`aria-label`, `aria-description`, and button input values. Recognizes translation
+expressions such as `{{ t('key') }}`, `{{ $t('key') }}`, and `{t('key')}`; Angular
+translation pipes/directives and `i18n` markers; Vue `v-t` and `i18n-t`; and React
+`Trans`/`FormattedMessage` components. Translating content does not exempt
+untranslated attributes. Comments, scripts, styles, whitespace, numbers, and
+symbols are ignored. HTML entities are decoded, so `&#x20;` is whitespace.
+
+For example, each of these files would be reported because **Save** is hardcoded:
+
+```html
+<!-- HTML / Angular -->
+<h1>{{ 'page.title' | translate }}</h1>
+<button>Save</button>
+```
+
+```jsx
+// React
+const Page = () => <><h1>{t('page.title')}</h1><button>Save</button></>;
+```
+
+```html
+<!-- Vue -->
+<template><h1>{{ $t('page.title') }}</h1><button>Save</button></template>
+```
+
+Example output:
+
+```text
+Files with untranslated text (2):
+  - src/pages/Home.tsx
+  - src/pages/Settings.vue
+```
+
+This is a static check, not a guarantee of complete translation coverage. Runtime
+values, function return values, imported strings, and custom component props
+outside the checked attributes cannot be resolved and are skipped. It does not
+execute templates, evaluate CSS visibility, validate translation keys, or parse
+framework control-flow/ICU syntax. Vue templates must use HTML, not a preprocessor
+such as Pug. Native HTML `translate="yes"` and `translate="no"` are not treated as
+application translation directives. A scan matching no supported files reports
+that separately and exits successfully. Invalid JavaScript/TypeScript raises an
+error naming the file instead of silently reporting a clean scan.
 
 #### Validate Translation Files
 

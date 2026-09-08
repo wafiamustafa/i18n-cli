@@ -13,3 +13,8 @@ export interface CommandContext {
   fileManager: FileManager;
   options: GlobalOptions;
 }
+
+export interface TranslationCheckContext {
+  config: Pick<I18nConfig, "compiledUsagePatterns">;
+  options: GlobalOptions;
+}
